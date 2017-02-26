@@ -21,6 +21,8 @@ $(document).ready(function() {
         lineData.addRow(
             [timeVal, Number(data), null, null, null]);
         lineChart.draw(lineData, lineChartOptions);
+
+        trimData();
     });
 
     socket.on('envbroadcast', function(data) {
@@ -35,6 +37,8 @@ $(document).ready(function() {
         lineData.addRow(
             [timeVal, null, Number(data['tempGet']), Number(data['photoAvgGet']), Number(data['photoGet'])]);
         lineChart.draw(lineData, lineChartOptions);
+
+        trimData();
     });
 
     google.charts.load('current', {
@@ -74,4 +78,10 @@ $(document).ready(function() {
 
         lineChart = new google.visualization.LineChart(document.getElementById('linechart_div'));
     }
+
+    function trimData() {
+        while (lineData.getNumberOfRows() > 3600) {
+            lineData.removeRow(0);
+        };
+    };
 });
