@@ -71,7 +71,15 @@ $(document).ready(function() {
         };
 
         lineChartOptions = {
-            interpolateNulls: true
+            interpolateNulls: true,
+            legend: {
+                position: 'bottom'
+            },
+            chartArea: {
+              left: 50,
+              width: 800,
+              top: 50
+            }
         };
 
         gaugeChart = new google.visualization.Gauge(document.getElementById('gauge_div'));
