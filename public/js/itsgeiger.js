@@ -12,30 +12,24 @@ $(document).ready(function() {
     });
 
     socket.on('cpmBroadcast', function(data) {
-        var time = new Date();
-        var timeVal = [time.getHours(), time.getMinutes(), time.getSeconds()];
-
         gaugeData.setValue(0, 1, Number(data));
         gaugeChart.draw(gaugeData, gaugeOptions);
 
         lineData.addRow(
-            [timeVal, Number(data), null, null, null]);
+            [getTimeVal(), Number(data), null, null, null]);
         lineChart.draw(lineData, lineChartOptions);
 
         trimData();
     });
 
     socket.on('envbroadcast', function(data) {
-        var time = new Date();
-        var timeVal = [time.getHours(), time.getMinutes(), time.getSeconds()];
-
         gaugeData.setValue(1, 1, Number(data['tempGet']));
         gaugeData.setValue(2, 1, Number(data['photoAvgGet']));
         gaugeData.setValue(3, 1, Number(data['photoGet']));
         gaugeChart.draw(gaugeData, gaugeOptions);
 
         lineData.addRow(
-            [timeVal, null, Number(data['tempGet']), Number(data['photoAvgGet']), Number(data['photoGet'])]);
+            [getTimeVal(), null, Number(data['tempGet']), Number(data['photoAvgGet']), Number(data['photoGet'])]);
         lineChart.draw(lineData, lineChartOptions);
 
         trimData();
@@ -92,4 +86,9 @@ $(document).ready(function() {
             lineData.removeRow(0);
         };
     };
+
+    function getTimeVal() {
+      var time = new Date();
+      return [time.getHours(), time.getMinutes(), time.getSeconds()];
+    }
 });
