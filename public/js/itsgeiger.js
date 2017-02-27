@@ -82,7 +82,7 @@ $(document).ready(function() {
     }
 
     function trimData() {
-        while (lineData.getNumberOfRows() > 3600) {
+        while (lineData.getNumberOfRows() > 1000) {
             lineData.removeRow(0);
         };
     };
