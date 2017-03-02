@@ -1,7 +1,7 @@
 $(document).ready(function() {
-    var gaugeData;
-    var gaugeChart;
-    var gaugeOptions;
+    var cpmGaugeData;
+    var cpmGaugeChart;
+    var cpmGaugeOptions;
     var lineData;
     var lineChart;
     var lineChartOptions;
@@ -12,8 +12,8 @@ $(document).ready(function() {
     });
 
     socket.on('cpmBroadcast', function(data) {
-        gaugeData.setValue(0, 1, Number(data));
-        gaugeChart.draw(gaugeData, gaugeOptions);
+        cpmGaugeData.setValue(0, 1, Number(data));
+        cpmGaugeChart.draw(cpmGaugeData, cpmGaugeOptions);
 
         lineData.addRow(
             [getTimeVal(), Number(data), null, null, null]);
@@ -23,10 +23,10 @@ $(document).ready(function() {
     });
 
     socket.on('envbroadcast', function(data) {
-        gaugeData.setValue(1, 1, Number(data['tempGet']));
-        gaugeData.setValue(2, 1, Number(data['photoAvgGet']));
-        gaugeData.setValue(3, 1, Number(data['photoGet']));
-        gaugeChart.draw(gaugeData, gaugeOptions);
+        cpmGaugeData.setValue(1, 1, Number(data['tempGet']));
+        cpmGaugeData.setValue(2, 1, Number(data['photoAvgGet']));
+        cpmGaugeData.setValue(3, 1, Number(data['photoGet']));
+        cpmGaugeChart.draw(cpmGaugeData, cpmGaugeOptions);
 
         lineData.addRow(
             [getTimeVal(), null, Number(data['tempGet']), Number(data['photoAvgGet']), Number(data['photoGet'])]);
@@ -42,7 +42,7 @@ $(document).ready(function() {
 
     function drawChart() {
 
-        gaugeData = google.visualization.arrayToDataTable([
+        cpmGaugeData = google.visualization.arrayToDataTable([
             ['Label', 'Value'],
             ['CPM', 0],
             ['Temperature', 0],
@@ -57,7 +57,7 @@ $(document).ready(function() {
         lineData.addColumn('number', 'Photo-Average');
         lineData.addColumn('number', 'Photo');
 
-        gaugeOptions = {
+        cpmGaugeOptions = {
             width: 900,
             height: 250,
             minorTicks: 10,
@@ -76,7 +76,7 @@ $(document).ready(function() {
             }
         };
 
-        gaugeChart = new google.visualization.Gauge(document.getElementById('gauge_div'));
+        cpmGaugeChart = new google.visualization.Gauge(document.getElementById('gauge_div'));
 
         lineChart = new google.visualization.LineChart(document.getElementById('linechart_div'));
     }
