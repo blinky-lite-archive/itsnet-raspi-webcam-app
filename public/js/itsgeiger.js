@@ -16,7 +16,7 @@ $(document).ready(function() {
         cpmGaugeChart.draw(cpmGaugeData, cpmGaugeOptions);
 
         lineData.addRow(
-            [getTimeVal(), Number(data), null, null, null]);
+            [new Date(), Number(data), null, null, null]);
         lineChart.draw(lineData, lineChartOptions);
 
         trimData();
@@ -31,7 +31,7 @@ $(document).ready(function() {
         photoGaugeChart.draw(photoGaugeData, photoGaugeOptions);
 
         lineData.addRow(
-            [getTimeVal(), null, Number(data['tempGet']), Number(data['photoAvgGet']), Number(data['photoGet'])]);
+            [new Date(), null, Number(data['tempGet']), Number(data['photoAvgGet']), Number(data['photoGet'])]);
         lineChart.draw(lineData, lineChartOptions);
 
         trimData();
@@ -62,7 +62,7 @@ $(document).ready(function() {
         ]);
 
         lineData = new google.visualization.DataTable();
-        lineData.addColumn('timeofday', 'Time');
+        lineData.addColumn('datetime', 'Time');
         lineData.addColumn('number', 'CPM');
         lineData.addColumn('number', 'Temperature');
         lineData.addColumn('number', 'Photo-Average');
