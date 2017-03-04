@@ -102,18 +102,49 @@ $(document).ready(function() {
             yellowFrom: 200,
             yellowTo: 400,
             greenFrom: 400,
-            greenTo:1023
+            greenTo: 1023
         };
         photoGaugeOptions = photoAvgGaugeOptions;
 
         lineChartOptions = {
             interpolateNulls: true,
+            series: {
+                0: {
+                    targetAxisIndex: 0
+                },
+                1: {
+                    targetAxisIndex: 0
+                },
+                2: {
+                    targetAxisIndex: 1
+                },
+                3: {
+                    targetAxisIndex: 1
+                },
+            },
+            vAxes: {
+                // Adds titles to each axis.
+                0: {
+                    title: 'CPM & Temperature',
+                    minValue:0,
+                    viewWindow: {
+                        min: 0
+                    }
+                },
+                1: {
+                    title: 'Photodiode',
+                    minValue:0,
+                    viewWindow: {
+                        min: 0
+                    }
+                }
+            },
             legend: {
                 position: 'bottom'
             },
             chartArea: {
                 left: 50,
-                width: 800,
+                width: 750,
                 top: 50
             }
         };
