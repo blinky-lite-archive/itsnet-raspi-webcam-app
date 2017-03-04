@@ -1,7 +1,7 @@
 $(document).ready(function() {
-    var cpmGaugeData;
-    var cpmGaugeChart;
-    var cpmGaugeOptions;
+    var cpmGaugeData, tempGaugeData, photoAvgGaugeData, photoGaugeData;
+    var cpmGaugeChart, tempGaugeChart, photoAvgGaugeChart, photoGaugeChart;
+    var cpmGaugeOptions, tempGaugeOptions, photoAvgGaugeOptions, photoGaugeOptions;
     var lineData;
     var lineChart;
     var lineChartOptions;
@@ -23,10 +23,12 @@ $(document).ready(function() {
     });
 
     socket.on('envbroadcast', function(data) {
-        cpmGaugeData.setValue(1, 1, Number(data['tempGet']));
-        cpmGaugeData.setValue(2, 1, Number(data['photoAvgGet']));
-        cpmGaugeData.setValue(3, 1, Number(data['photoGet']));
-        cpmGaugeChart.draw(cpmGaugeData, cpmGaugeOptions);
+        tempGaugeData.setValue(0, 1, Number(data['tempGet']));
+        photoAvgGaugeData.setValue(0, 1, Number(data['photoAvgGet']));
+        photoGaugeData.setValue(0, 1, Number(data['photoGet']));
+        tempGaugeChart.draw(tempGaugeData, tempGaugeOptions);
+        photoAvgGaugeChart.draw(photoAvgGaugeData, photoAvgGaugeOptions);
+        photoGaugeChart.draw(photoGaugeData, photoGaugeOptions);
 
         lineData.addRow(
             [getTimeVal(), null, Number(data['tempGet']), Number(data['photoAvgGet']), Number(data['photoGet'])]);
@@ -44,9 +46,18 @@ $(document).ready(function() {
 
         cpmGaugeData = google.visualization.arrayToDataTable([
             ['Label', 'Value'],
-            ['CPM', 0],
-            ['Temperature', 0],
-            ['Photo-Avg', 0],
+            ['CPM', 0]
+        ]);
+        tempGaugeData = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Temperature', 0]
+        ]);
+        photoAvgGaugeData = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Photo-Avg', 0]
+        ]);
+        photoGaugeData = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
             ['Photo', 0]
         ]);
 
@@ -58,11 +69,38 @@ $(document).ready(function() {
         lineData.addColumn('number', 'Photo');
 
         cpmGaugeOptions = {
-            width: 900,
+            width: 225,
             height: 250,
             minorTicks: 10,
-            max: 40
+            max: 40,
+            greenFrom: 0,
+            greenTo: 27,
+            yellowFrom: 27,
+            yellowTo: 35,
+            redFrom: 35,
+            redTo: 40
         };
+        tempGaugeOptions = {
+            width: 225,
+            height: 250,
+            minorTicks: 10,
+            max: 40,
+            greenFrom: 17.5,
+            greenTo: 25
+        };
+        photoAvgGaugeOptions = {
+            width: 225,
+            height: 250,
+            minorTicks: 10,
+            max: 1023,
+            redFrom: 0,
+            redTo: 200,
+            yellowFrom: 200,
+            yellowTo: 400,
+            greenFrom: 400,
+            greenTo:1023
+        };
+        photoGaugeOptions = photoAvgGaugeOptions;
 
         lineChartOptions = {
             interpolateNulls: true,
@@ -70,13 +108,16 @@ $(document).ready(function() {
                 position: 'bottom'
             },
             chartArea: {
-              left: 50,
-              width: 800,
-              top: 50
+                left: 50,
+                width: 800,
+                top: 50
             }
         };
 
-        cpmGaugeChart = new google.visualization.Gauge(document.getElementById('gauge_div'));
+        cpmGaugeChart = new google.visualization.Gauge(document.getElementById('cpm_div'));
+        tempGaugeChart = new google.visualization.Gauge(document.getElementById('temp_div'));
+        photoAvgGaugeChart = new google.visualization.Gauge(document.getElementById('photoavg_div'));
+        photoGaugeChart = new google.visualization.Gauge(document.getElementById('photo_div'));
 
         lineChart = new google.visualization.LineChart(document.getElementById('linechart_div'));
     }
@@ -88,7 +129,7 @@ $(document).ready(function() {
     };
 
     function getTimeVal() {
-      var time = new Date();
-      return [time.getHours(), time.getMinutes(), time.getSeconds()];
+        var time = new Date();
+        return [time.getHours(), time.getMinutes(), time.getSeconds()];
     }
 });
