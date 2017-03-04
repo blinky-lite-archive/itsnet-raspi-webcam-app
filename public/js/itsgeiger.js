@@ -123,7 +123,7 @@ $(document).ready(function() {
     }
 
     function trimData() {
-        while (lineData.getNumberOfRows() > 1000) {
+        while (lineData.getNumberOfRows() > 1500) {
             lineData.removeRow(0);
         };
     };
