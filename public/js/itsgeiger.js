@@ -86,7 +86,11 @@ $(document).ready(function() {
             minorTicks: 10,
             max: 40,
             greenFrom: 16,
-            greenTo: 30
+            greenTo: 24,
+            yellowFrom: 24,
+            yellowTo: 30,
+            redFrom: 30,
+            redTo: 40
         };
         photoAvgGaugeOptions = {
             width: 225,
