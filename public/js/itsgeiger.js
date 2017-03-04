@@ -85,8 +85,8 @@ $(document).ready(function() {
             height: 250,
             minorTicks: 10,
             max: 40,
-            greenFrom: 17.5,
-            greenTo: 25
+            greenFrom: 16,
+            greenTo: 30
         };
         photoAvgGaugeOptions = {
             width: 225,
