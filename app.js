@@ -11,8 +11,8 @@ var clientsConnected = 0;
 
 var mqttClient = mqtt.connect('tcp://broker.shiftr.io', {
   clientId: 'experimentalNodeJSServer',
-  username: '45357989',
-  password: 'bad7813039046c87'
+  username: process.env.MQTTUSER,
+  password: process.env.MQTTKEY
 });
 
 mqttClient.on('connect', function(){
