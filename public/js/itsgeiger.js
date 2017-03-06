@@ -98,10 +98,10 @@ $(document).ready(function() {
             minorTicks: 10,
             max: 1023,
             redFrom: 0,
-            redTo: 200,
-            yellowFrom: 200,
-            yellowTo: 400,
-            greenFrom: 400,
+            redTo: 100,
+            yellowFrom: 100,
+            yellowTo: 200,
+            greenFrom: 200,
             greenTo: 1023
         };
         photoGaugeOptions = photoAvgGaugeOptions;
