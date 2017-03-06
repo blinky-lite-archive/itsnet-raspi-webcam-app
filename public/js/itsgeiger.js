@@ -153,8 +153,13 @@ $(document).ready(function() {
         tempGaugeChart = new google.visualization.Gauge(document.getElementById('temp_div'));
         photoAvgGaugeChart = new google.visualization.Gauge(document.getElementById('photoavg_div'));
         photoGaugeChart = new google.visualization.Gauge(document.getElementById('photo_div'));
-
         lineChart = new google.visualization.LineChart(document.getElementById('linechart_div'));
+
+        cpmGaugeChart.draw(cpmGaugeData, cpmGaugeOptions);
+        tempGaugeChart.draw(tempGaugeData, tempGaugeOptions);
+        photoAvgGaugeChart.draw(photoAvgGaugeData, photoAvgGaugeOptions);
+        photoGaugeChart.draw(photoGaugeData, photoGaugeOptions);
+        lineChart.draw(lineData, lineChartOptions);
     }
 
     function trimData() {
