@@ -10,10 +10,11 @@ var io = socketio(server);
 var clientsConnected = 0;
 
 var mqttClient = mqtt.connect('tcp://broker.shiftr.io', {
-  clientId: 'experimentalNodeJSServer',
+  clientId: 'itsnet-test-app',
   username: process.env.MQTTUSER,
   password: process.env.MQTTKEY
 });
+
 
 mqttClient.on('connect', function(){
   console.log('Connected to MQTT broker.');

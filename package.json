@@ -1,28 +1,27 @@
 {
-  "name": "socket-app",
+  "name": "itsnet-test-app",
   "version": "1.0.0",
   "description": "A toy app to get started",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "David McGinnis",
-  "license": "ISC",
   "dependencies": {
     "dygraphs": "^2.0.0",
     "express": "^4.14.1",
-    "jquery": "^3.1.1",
     "mqtt": "^2.4.0",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stevemolloy/nodeITSenv.git"
+    "url": "git+ssh://git@github.com/david-mcginnis/itsnet-test-app.git"
   },
   "keywords": [],
+  "author": "",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/stevemolloy/nodeITSenv/issues"
+    "url": "https://github.com/"
   },
-  "homepage": "https://github.com/stevemolloy/nodeITSenv#readme"
+  "homepage": "https://github.com/"
 }
