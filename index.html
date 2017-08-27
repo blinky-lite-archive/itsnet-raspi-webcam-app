@@ -1,49 +1,23 @@
 <html>
 
 <head>
-    <title>ITS Environmental Monitor</title>
+    <title>ITS Timer Table</title>
     <link type="text/css" rel="stylesheet" href="css/its.css">
     <link rel="stylesheet" href="css/jquery-ui.min.css">
     <script src="/js/jquery.js"></script>
     <script src="/js/jquery-ui.min.js"></script>  
     <script src="/js/generate-table.js"></script>  
+    <script src="/js/timer-table.js"></script>  
 </head>
 
 <body>
-    <h1>ITS Environmentaly Monitor</h1>
-    <input type="text" name="date" id="date">
-    <div id='mytable'></div>
-    <div><input type="checkbox" id="box" onChange="checkCheck();" ></div>
-<!-- Tabs -->
-    <h2 class="demoHeaders">Tabs</h2>
-    <div id="tabs">
-    	<ul>
-    		<li><a href="#tabs-1">First</a></li>
-    		<li><a href="#tabs-2">Second</a></li>
-    		<li><a href="#tabs-3">Third</a></li>
-    	</ul>
-    	<div id="tabs-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-    	<div id="tabs-2">Phasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
-    	<div id="tabs-3">Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
-    </div>
+    <h1>ITS Timer Table</h1>
+    <div id='timerTable'></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script>
-        function checkCheck() {
-            if($("#box").is(':checked')) {
-                console.log("checked");  // checked
-                $ ( "#mytable").hide();
-            }
-            else {
-                console.log("unchecked");  // unchecked
-                $ ( "#mytable").show();
-            }
-            
-        }
+        let tt = new TimerTable('Ch1','Ch2','Ch3','Ch4', true);
         $( document ).ready(function() {
-            console.log("Hi There");
-            $( "#date" ).datepicker();
-            $( "#tabs" ).tabs();
-            document.getElementById('mytable').appendChild(generate_table());
+            tt.createTimer('timerTable');
         });
     </script>
 </body>
