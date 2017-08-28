@@ -11,7 +11,7 @@ var clientsConnected = 0;
 var msgObj = "";
 var topics = ['itsClkRecvr01/set/channel'];
 var messages = [''];
-var okayIps = ['130.235.82.5'];
+var okayIps = ['130.235.82.5', '83.251.168.60'];
 
 var mqttClient = mqtt.connect('tcp://broker.shiftr.io', {
   clientId: 'itsnet-test-app',
