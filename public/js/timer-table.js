@@ -1,6 +1,6 @@
 class TimerTable {
 
-  constructor(ch1Title,ch2Title,ch3Title,ch4Title, settingsEnabled) {
+  constructor(ch1Title,ch2Title,ch3Title,ch4Title) {
       this.chTitle = ["Chx", "Chx", "Chx", "Chx"];
       this.startTime = [0,0,0,0];
       this.stopTime = [1,1,1,1];
@@ -8,11 +8,8 @@ class TimerTable {
       this.chTitle[1] = ch2Title;
       this.chTitle[2] = ch3Title;
       this.chTitle[3] = ch4Title;
-      this.settingsEnabled = settingsEnabled;
-      this.changeSettingsOn = false;
  }
   setDisabled(disabled) {
-    this.changeSettingsOn = !disabled;
     for (var irow = 0; irow < 8 ; ++irow) {
       for (var icol = 1; icol < 5; icol++) {
         var id = "#" + this.tableId +  "-ch" + icol + "-bit" + irow;
@@ -25,30 +22,15 @@ class TimerTable {
         id = "#" + this.tableId +  "-ch" + icol + "Stop";
         $(id).prop("disabled", disabled);
     }
-  }
-  changeSettings() {
-    console.log("changing Setings");
-    document.getElementById(this.tableId + "-changeButton").style.display = "none";
-    document.getElementById(this.tableId + "-setButton").style.display = "block";
-    document.getElementById(this.tableId + "-cancelButton").style.display = "block";
-    this.setDisabled(false);
+    if ( disabled) document.getElementById(this.tableId + '-setButton').style.display = "none";
+    if (!disabled) document.getElementById(this.tableId + '-setButton').style.display = "block";
+    this.settingsEnabled = !disabled;
   }
   setSettings() {
     console.log("setSettings");
-    document.getElementById(this.tableId + "-changeButton").style.display = "block";
-    document.getElementById(this.tableId + "-setButton").style.display = "none";
-    document.getElementById(this.tableId + "-cancelButton").style.display = "none";
-    this.setDisabled(true);
-  }
-  cancelChangeSettings() {
-    console.log("cancelSettings");
-    document.getElementById(this.tableId + "-changeButton").style.display = "block";
-    document.getElementById(this.tableId + "-setButton").style.display = "none";
-    document.getElementById(this.tableId + "-cancelButton").style.display = "none";
-    this.setDisabled(true);
   }
   createTimer(tableId) {
-      // creates a <table> element and a <tbody> element
+    // creates a <table> element and a <tbody> element
       var _this = this; // a weird thing to do to define button click
       this.tableId = tableId;
       var divy = document.createElement("div");
@@ -57,6 +39,8 @@ class TimerTable {
      
       var row = document.createElement("tr");
       var cell = document.createElement("td");
+      row.appendChild(cell);
+      cell = document.createElement("td");
       row.appendChild(cell);
 
       cell = document.createElement("td");
@@ -73,31 +57,10 @@ class TimerTable {
       button.style.display = "none";
 
       cell = document.createElement("td");
-      button = document.createElement("BUTTON");
-      buttonText = document.createTextNode("Change");     
-      button.style.width = "5em";
-      button.style.textAlign = "center";
-      button.appendChild(buttonText);
-      button.setAttribute("id", tableId + "-changeButton");
-      if (!this.settingsEnabled) button.disabled = true;
-      button.onclick = function() { _this.changeSettings()}; 
-      cell.style.textAlign = "center";
-      cell.appendChild(button);
       row.appendChild(cell);
- 
       cell = document.createElement("td");
-      button = document.createElement("BUTTON");
-      buttonText = document.createTextNode("Cancel");     
-      button.style.width = "5em";
-      button.style.textAlign = "center";
-      button.appendChild(buttonText);
-      button.setAttribute("id", tableId + "-cancelButton");
-      button.onclick = function() { _this.cancelChangeSettings()}; 
-      cell.style.textAlign = "center";
-      cell.appendChild(button);
       row.appendChild(cell);
-      button.style.display = "none";
-
+      
       tblBody.appendChild(row);
 
       row = document.createElement("tr");
@@ -178,6 +141,22 @@ class TimerTable {
       divy.style.width = "28em";
       divy.appendChild(tbl);
       document.getElementById(tableId).appendChild(divy);
-      this.setDisabled(true);
+      this.setDisabled(false);
+
+  }
+  readData(data)
+  {
+    for (var ii = 1; ii < 5; ++ii) {
+      var chxdata = data['channel' + ii].split(" ");
+      this.startTime[ii - 1] = Number(chxdata[1]);
+      this.stopTime[ii - 1]  = Number(chxdata[2]);
+      document.getElementById(this.tableId + '-ch' + ii + 'Start').setAttribute('value',this.startTime[ii -1]);
+      document.getElementById(this.tableId + '-ch' + ii + 'Stop').setAttribute('value',this.stopTime[ii -1]);
+    }
+  }
+  requestData()
+  {
+    
   }
 }
+
