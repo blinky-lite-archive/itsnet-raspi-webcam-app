@@ -1,13 +1,16 @@
 class TimerTable {
 
-  constructor(ch1Title,ch2Title,ch3Title,ch4Title) {
+  constructor(ch1Title,ch2Title,ch3Title,ch4Title, publishTopic, label) {
       this.chTitle = ["Chx", "Chx", "Chx", "Chx"];
       this.startTime = [0,0,0,0];
       this.stopTime = [1,1,1,1];
+      this.event = [0,0,0,0];
       this.chTitle[0] = ch1Title;
       this.chTitle[1] = ch2Title;
       this.chTitle[2] = ch3Title;
       this.chTitle[3] = ch4Title;
+      this.publishTopic = publishTopic;
+      this.label = label;
  }
   setDisabled(disabled) {
     for (var irow = 0; irow < 8 ; ++irow) {
@@ -26,14 +29,33 @@ class TimerTable {
     if (!disabled) document.getElementById(this.tableId + '-setButton').style.display = "block";
     this.settingsEnabled = !disabled;
   }
-  setSettings() {
-    console.log("setSettings");
+  setSettings() 
+  {
+    var data = {};
+    for (var ii = 1; ii < 5; ++ii) 
+    {
+      this.startTime[ii - 1] = Number($( '#' + this.tableId + '-ch' + ii + 'Start').val())
+      this.stopTime[ii - 1]  = Number($( '#' + this.tableId + '-ch' + ii + 'Stop').val());
+			var mask = 0;
+			var pow2 = 1;
+			for (var ij = 0; ij < 8; ++ij)
+			{
+        if ($( '#' + this.tableId + "-ch" + ii + "-bit" + ij).prop('checked')) mask = mask + pow2;
+				pow2 = pow2 * 2;
+			}
+			this.event[ii - 1] = mask; 
+      data['channel' + ii] = this.event[ii - 1].toString() + ' ' + this.startTime[ii - 1].toString() + ' ' + this.stopTime[ii - 1];
+    }
+    var data2 = {'topic':this.publishTopic, 'jsonData':data};
+    socket.emit('publishMqttTopic', data2);
   }
   createTimer(tableId) {
     // creates a <table> element and a <tbody> element
       var _this = this; // a weird thing to do to define button click
       this.tableId = tableId;
       var divy = document.createElement("div");
+      $( "#" + tableId ).append('<div><label for="name" style="background-color:#FFFFFF;color: #0095CD;">' + this.label + '</label></div>');
+     
       var tbl = document.createElement("table");
       var tblBody = document.createElement("tbody");
      
@@ -50,6 +72,7 @@ class TimerTable {
       button.style.textAlign = "center";
       button.appendChild(buttonText);
       button.setAttribute("id", tableId + "-setButton");
+//      button.setAttribute("value", 'Submit');
       button.onclick = function() { _this.setSettings()}; 
       cell.style.textAlign = "center";
       cell.appendChild(button);
@@ -144,19 +167,27 @@ class TimerTable {
       this.setDisabled(false);
 
   }
+  getBit(myByte, position)
+	{
+	   return (myByte >> position) & 1;
+	}
   readData(data)
   {
     for (var ii = 1; ii < 5; ++ii) {
       var chxdata = data['channel' + ii].split(" ");
       this.startTime[ii - 1] = Number(chxdata[1]);
       this.stopTime[ii - 1]  = Number(chxdata[2]);
+      this.event[ii - 1] = Number(chxdata[0]);
+			for (var ij = 0; ij < 8; ++ij)
+			{
+				var bitOn = false;
+				if (this.getBit(this.event[ii - 1], ij) > 0) bitOn = true;
+       document.getElementById(this.tableId + "-ch" + ii + "-bit" + ij).checked = bitOn;
+			}
       document.getElementById(this.tableId + '-ch' + ii + 'Start').setAttribute('value',this.startTime[ii -1]);
       document.getElementById(this.tableId + '-ch' + ii + 'Stop').setAttribute('value',this.stopTime[ii -1]);
     }
   }
-  requestData()
-  {
-    
-  }
+
 }
 

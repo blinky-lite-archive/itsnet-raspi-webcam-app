@@ -9,8 +9,8 @@ var io = socketio(server);
 
 var clientsConnected = 0;
 var msgObj = "";
-var topics = ['itsClkRecvr01/set/channel'];
-var messages = [''];
+var topics = ['itsClkRecvr01/set/channel', 'itsClkRecvr02/set/channel'];
+var messages = [{"channel1":"1 1 2","channel2":"1 1 2","channel4":"1 1 2","channel3":"1 1 2"}, {"channel1":"1 1 2","channel2":"1 1 2","channel4":"1 1 2","channel3":"1 1 2"}];
 var okayIps = ['130.235.82.5', '83.251.168.60'];
 
 var mqttClient = mqtt.connect('tcp://broker.shiftr.io', {
@@ -40,6 +40,7 @@ io.on('connection', function(browserClient){
   console.log('Number of connected clients: ' + ++clientsConnected);
   browserClient.on('join', function(data){console.log(data);});
   browserClient.on('initData', function(data){sendJsonDataToClient(data);});
+  browserClient.on('publishMqttTopic', function(data){publishMqttTopic(data);});
   browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
 });
 
@@ -67,6 +68,7 @@ function handleMqttMessage(topic, message)
   while (itopic < topics.length) {
     if (topic == topics[itopic]) {
       messages[itopic] = JSON.parse(message);
+      console.log("Received Mqtt message with topic " + topic + " data: " + JSON.stringify(messages[itopic]))
       io.sockets.emit(topics[itopic], messages[itopic]);
       itopic == topics.length;
     }
@@ -107,4 +109,10 @@ function checkIp(ip)
     io.sockets.emit('enableSettings', false);
     
   }
+}
+function publishMqttTopic(data)
+{
+  console.log("Publishing to " + data['topic'] + " data: " + JSON.stringify(data['jsonData']));
+  mqttClient.publish(data['topic'], JSON.stringify(data['jsonData']));
+  
 }

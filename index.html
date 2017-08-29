@@ -11,18 +11,32 @@
 
 <body>
     <h1>ITS Timer Table</h1>
-    <div id='timerTable'></div>
+    <div >
+        <div id='llrfTimerTable' style="float:left;"></div>
+        <div id='modulatorTimerTable' style="float:left;"></div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script>
-        let tt = new TimerTable('Ch1','Ch2','Ch3','Ch4', true);
-        $( document ).ready(function() {
-            var socket = io.connect(window.location.href);
-            socket.on('enableSettings', function(data) {tt.setDisabled(!data);});
+        var socket;
+        let llrfTimer = new TimerTable('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr01/set/channel', 'LLRF Timer');
+        let modTimer  = new TimerTable('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer');
+        $( document ).ready(function() 
+        {
+            socket = io.connect(window.location.href);
+            socket.on('enableSettings', function(data) 
+            {
+                llrfTimer.setDisabled(!data);
+                modTimer.setDisabled(!data);
+                if (!data) alert("Looky but no touchy!");
+            });
  
-            tt.createTimer('timerTable');
+            llrfTimer.createTimer('llrfTimerTable');
+            modTimer.createTimer('modulatorTimerTable');
             socket.emit('initData', 'itsClkRecvr01/set/channel');
+            socket.emit('initData', 'itsClkRecvr02/set/channel');
             socket.on('connect', function(data) {socket.emit('join', 'Connection from browser established.');});
-            socket.on('itsClkRecvr01/set/channel', function(data) {tt.readData(data); });
+            socket.on('itsClkRecvr01/set/channel', function(data) {llrfTimer.readData(data); });
+            socket.on('itsClkRecvr02/set/channel', function(data) {modTimer.readData(data); });
 
         });
     </script>
