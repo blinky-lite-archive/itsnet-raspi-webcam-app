@@ -54,7 +54,7 @@ class TimerTable {
       var _this = this; // a weird thing to do to define button click
       this.tableId = tableId;
       var divy = document.createElement("div");
-      $( "#" + tableId ).append('<div><label for="name" style="background-color:#FFFFFF;color: #0095CD;">' + this.label + '</label></div>');
+      $( "#" + tableId ).append('<div><label for="name" style="background-color:#FFFFFF;color: #0095CD; font-weight: bold;">' + this.label + '</label></div>');
      
       var tbl = document.createElement("table");
       var tblBody = document.createElement("tbody");
@@ -173,6 +173,7 @@ class TimerTable {
 	}
   readData(data)
   {
+    console.log("Received: " + JSON.stringify(data));
     for (var ii = 1; ii < 5; ++ii) {
       var chxdata = data['channel' + ii].split(" ");
       this.startTime[ii - 1] = Number(chxdata[1]);
@@ -182,10 +183,10 @@ class TimerTable {
 			{
 				var bitOn = false;
 				if (this.getBit(this.event[ii - 1], ij) > 0) bitOn = true;
-       document.getElementById(this.tableId + "-ch" + ii + "-bit" + ij).checked = bitOn;
+        $( '#' + this.tableId + "-ch" + ii + "-bit" + ij).prop('checked', bitOn);
 			}
-      document.getElementById(this.tableId + '-ch' + ii + 'Start').setAttribute('value',this.startTime[ii -1]);
-      document.getElementById(this.tableId + '-ch' + ii + 'Stop').setAttribute('value',this.stopTime[ii -1]);
+			$( '#' + this.tableId + '-ch' + ii + 'Start').val(this.startTime[ii - 1]);
+			$( '#' + this.tableId + '-ch' + ii + 'Stop').val(this.stopTime[ii - 1]);
     }
   }
 

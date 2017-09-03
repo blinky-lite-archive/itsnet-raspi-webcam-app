@@ -34,6 +34,7 @@
             modTimer.createTimer('modulatorTimerTable');
             socket.emit('initData', 'itsClkRecvr01/set/channel');
             socket.emit('initData', 'itsClkRecvr02/set/channel');
+            socket.emit('ipStatus', 'get');
             socket.on('connect', function(data) {socket.emit('join', 'Connection from browser established.');});
             socket.on('itsClkRecvr01/set/channel', function(data) {llrfTimer.readData(data); });
             socket.on('itsClkRecvr02/set/channel', function(data) {modTimer.readData(data); });
