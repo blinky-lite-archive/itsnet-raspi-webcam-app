@@ -2,21 +2,19 @@ var express = require('express');
 var http = require('http');
 var socketio = require('socket.io');
 var mqtt = require('mqtt');
+var timerCard = require('./timerCard.js');
 
 var app = express();
 var server = http.createServer(app);
 var io = socketio(server);
 
 var clientsConnected = 0;
-var setTopics = ['itsClkRecvr01/set/channel', 'itsClkRecvr02/set/channel'];
-var setMessages = [{"channel1":"1 1 2","channel2":"1 1 2","channel4":"1 1 2","channel3":"1 1 2"}, {"channel1":"1 1 2","channel2":"1 1 2","channel4":"1 1 2","channel3":"1 1 2"}];
-var echoTopics = ['itsClkRecvr01/echo/channel', 'itsClkRecvr02/echo/channel'];
-var getTopics = ['itsClkRecvr01/get/channel', 'itsClkRecvr02/get/channel'];
 var okayIps = ['130.235.82.5', '83.251.168.60', '78.72.127.106'];
 var ipOkay = false;
 var ipAddress;
 
-var mqttClient = mqtt.connect('tcp://broker.shiftr.io', {
+var mqttClient = mqtt.connect('tcp://broker.shiftr.io', 
+{
   clientId: 'itsnet-test-app',
   username: process.env.MQTTUSER,
   password: process.env.MQTTKEY,
@@ -49,75 +47,12 @@ app.get('/', function(req, res, next){
 
 });
 
-io.on('connection', function(browserClient){
-  console.log('Number of connected clients: ' + ++clientsConnected);
-  browserClient.on('join', function(data){console.log(data);});
-  browserClient.on('initData', function(data){sendJsonDataToClient(data);});
-  browserClient.on('ipStatus', function(){sendIpStatus();});
-  browserClient.on('publishMqttTopic', function(data){publishMqttTopic(data);});
-  browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
-});
-
-
-server.listen(app.get('port'), function() {
+server.listen(app.get('port'), function() 
+{
   console.log('Server started on port: ', app.get('port'));
 });
 
-function sendJsonDataToClient(topic)
-{
-  var itopic = 0;
-  while (itopic < setTopics.length) 
-  {
-    if (topic == setTopics[itopic]) 
-    {
-      io.sockets.emit(setTopics[itopic], setMessages[itopic]);
-      itopic == setTopics.length;
-    }
-    ++itopic;
-  }
-}
-function handleMqttMessage(topic, message)
-{
-  var itopic = 0;
-  while (itopic < setTopics.length) {
-    if (topic == setTopics[itopic]) {
-      setMessages[itopic] = JSON.parse(message);
-      console.log("Received Mqtt message with topic " + topic + " data: " + JSON.stringify(setMessages[itopic]));
-      io.sockets.emit(setTopics[itopic], setMessages[itopic]);
-      itopic == setTopics.length;
-    }
-    ++itopic;
-  }
-  itopic = 0;
-  while (itopic < echoTopics.length) {
-    if (topic == echoTopics[itopic]) {
-      setMessages[itopic] = JSON.parse(message);
-      console.log("Received Mqtt message with topic " + topic + " data: " + JSON.stringify(setMessages[itopic]));
-      io.sockets.emit(setTopics[itopic], setMessages[itopic]);
-      itopic == echoTopics.length;
-    }
-    ++itopic;
-  }
-}
-function connectToMqtt()
-{
-  console.log('Connected to MQTT broker.');
-  for (var itopic = 0; itopic < setTopics.length; ++itopic) 
-  {
-    console.log("Subscribing to " + setTopics[itopic]);
-    mqttClient.subscribe(setTopics[itopic]);
-  }
-  for (var itopic = 0; itopic < echoTopics.length; ++itopic) 
-  {
-    console.log("Subscribing to " + echoTopics[itopic]);
-    mqttClient.subscribe(echoTopics[itopic]);
-  }
-  for (var itopic = 0; itopic < getTopics.length; ++itopic) 
-  {
-    console.log("Publishing: " + getTopics[itopic]);
-    mqttClient.publish(getTopics[itopic], ' ', {qos:0, retain:true, dup:false}, function() {});
-  }
-}
+
 function sendIpStatus()
 {
   if (ipOkay)
@@ -132,9 +67,24 @@ function sendIpStatus()
     
   }
 }
-function publishMqttTopic(data)
+
+
+io.on('connection', function(browserClient)
 {
-  console.log("Publishing to " + data['topic'] + " data: " + JSON.stringify(data['jsonData']));
-  mqttClient.publish(data['topic'], JSON.stringify(data['jsonData']), {qos:0, retain:true, dup:false}, function() {});
-  
+  console.log('Number of connected clients: ' + ++clientsConnected);
+  browserClient.on('join', function(data){console.log(data);});
+  browserClient.on('ipStatus', function(){sendIpStatus();});
+  browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
+  timerCard.setupSocket(browserClient, io, mqttClient);
+});
+
+
+function handleMqttMessage(topic, message)
+{
+  timerCard.handleMqtt(topic, message, io);
+}
+function connectToMqtt()
+{
+  console.log('Connected to MQTT broker.');
+  timerCard.subscribe(mqttClient);
 }

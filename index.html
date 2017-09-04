@@ -19,8 +19,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script>
         var socket;
-        let llrfTimer = new TimerTable('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr01/set/channel', 'LLRF Timer');
-        let modTimer  = new TimerTable('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer');
+        let llrfTimer = new TimerTable('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr01/set/channel', 'LLRF Timer', socket);
+        let modTimer  = new TimerTable('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer', socket);
         $( document ).ready(function() 
         {
             socket = io.connect(window.location.href);
@@ -33,8 +33,8 @@
  
             llrfTimer.createTimer('llrfTimerTable');
             modTimer.createTimer('modulatorTimerTable');
-            socket.emit('initData', 'itsClkRecvr01/set/channel');
-            socket.emit('initData', 'itsClkRecvr02/set/channel');
+            socket.emit('initTimerCard', 'itsClkRecvr01/set/channel');
+            socket.emit('initTimerCard', 'itsClkRecvr02/set/channel');
             socket.emit('ipStatus', 'get');
             socket.on('connect', function(data) {socket.emit('join', 'Connection from browser established.');});
             socket.on('itsClkRecvr01/set/channel', function(data) {llrfTimer.readData(data); });

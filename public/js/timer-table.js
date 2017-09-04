@@ -47,7 +47,7 @@ class TimerTable {
       data['channel' + ii] = this.event[ii - 1].toString() + ' ' + this.startTime[ii - 1].toString() + ' ' + this.stopTime[ii - 1];
     }
     var data2 = {'topic':this.publishTopic, 'jsonData':data};
-    socket.emit('publishMqttTopic', data2);
+    socket.emit('publishTimerCardMqttTopic', data2);
   }
   createTimer(tableId) {
     // creates a <table> element and a <tbody> element
@@ -129,7 +129,7 @@ class TimerTable {
       row.appendChild(cell);
       for (var icol = 1; icol < 5; icol++) {
           cell = document.createElement("td");
-          var input = document.createElement("INPUT");
+          input = document.createElement("INPUT");
           input.setAttribute("type", "number");
           input.setAttribute("value", this.stopTime[icol - 1]);
           input.setAttribute("id",tableId + "-ch" + icol + "Stop");
@@ -150,7 +150,7 @@ class TimerTable {
           row.appendChild(cell);
           for (var icol = 1; icol < 5; icol++) {
               cell = document.createElement("td");
-              var input = document.createElement("INPUT");
+              input = document.createElement("INPUT");
               input.setAttribute("type", "checkbox");
               input.setAttribute("id",tableId + "-ch" + icol + "-bit" + irow);
               cell.style.textAlign = "center";
