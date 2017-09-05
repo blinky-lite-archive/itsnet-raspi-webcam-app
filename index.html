@@ -3,24 +3,26 @@
 <head>
     <title>ITS Timer Table</title>
     <link type="text/css" rel="stylesheet" href="css/its.css">
-    <link rel="stylesheet" href="css/jquery-ui.min.css">
  	<link rel="shortcut icon" href="/favicon.ico">
     <script src="/js/jquery.js"></script>
     <script src="/js/jquery-ui.min.js"></script>  
-    <script src="/js/timer-table.js"></script>  
+    <script src="/js/timerCardClient.js"></script>  
+    <script src="/js/rfSigGenClient.js"></script>  
 </head>
 
 <body>
-    <h1>ITS Timer Table</h1>
-    <div >
+    <div class="mainDiv">
+        <h1>ITS Timer Table</h1>
         <div id='llrfTimerTable' style="float:left;"></div>
         <div id='modulatorTimerTable' style="float:left;"></div>
+        <div id='rfSigGenGui' style="float:left;"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script>
         var socket;
-        let llrfTimer = new TimerTable('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr01/set/channel', 'LLRF Timer', socket);
-        let modTimer  = new TimerTable('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer', socket);
+        let llrfTimer = new TimerCard('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr01/set/channel', 'LLRF Timer');
+        let modTimer  = new TimerCard('Ch1','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer');
+        let rfSigGen  = new RfSigGen('itsRfSigGen01/set/rf', 'RF Generator');
         $( document ).ready(function() 
         {
             socket = io.connect(window.location.href);
@@ -28,17 +30,21 @@
             {
                 llrfTimer.setDisabled(!data);
                 modTimer.setDisabled(!data);
+                rfSigGen.setDisabled(!data);
                 if (!data) alert("Looky but no touchy!");
             });
  
             llrfTimer.createTimer('llrfTimerTable');
             modTimer.createTimer('modulatorTimerTable');
+            rfSigGen.createGui('rfSigGenGui');
             socket.emit('initTimerCard', 'itsClkRecvr01/set/channel');
             socket.emit('initTimerCard', 'itsClkRecvr02/set/channel');
+            socket.emit('initRfSigGen' , 'itsRfSigGen01/set/rf');
             socket.emit('ipStatus', 'get');
             socket.on('connect', function(data) {socket.emit('join', 'Connection from browser established.');});
             socket.on('itsClkRecvr01/set/channel', function(data) {llrfTimer.readData(data); });
             socket.on('itsClkRecvr02/set/channel', function(data) {modTimer.readData(data); });
+            socket.on('itsRfSigGen01/set/rf',      function(data) {rfSigGen.readData(data); });
 
         });
     </script>

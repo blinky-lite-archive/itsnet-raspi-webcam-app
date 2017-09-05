@@ -1,6 +1,7 @@
-class TimerTable {
+class TimerCard {
 
-  constructor(ch1Title,ch2Title,ch3Title,ch4Title, publishTopic, label) {
+  constructor(ch1Title,ch2Title,ch3Title,ch4Title, publishTopic, label) 
+  {
       this.chTitle = ["Chx", "Chx", "Chx", "Chx"];
       this.startTime = [0,0,0,0];
       this.stopTime = [1,1,1,1];
@@ -11,6 +12,7 @@ class TimerTable {
       this.chTitle[3] = ch4Title;
       this.publishTopic = publishTopic;
       this.label = label;
+      this.settingsEnabled = false;
  }
   setDisabled(disabled) {
     for (var irow = 0; irow < 8 ; ++irow) {
@@ -31,7 +33,7 @@ class TimerTable {
   }
   setSettings() 
   {
-    var data = {};
+    var data = {};100
     for (var ii = 1; ii < 5; ++ii) 
     {
       this.startTime[ii - 1] = Number($( '#' + this.tableId + '-ch' + ii + 'Start').val())
@@ -54,7 +56,11 @@ class TimerTable {
       var _this = this; // a weird thing to do to define button click
       this.tableId = tableId;
       var divy = document.createElement("div");
-      $( "#" + tableId ).append('<div><label for="name" style="background-color:#FFFFFF;color: #0095CD; font-weight: bold;">' + this.label + '</label></div>');
+      var tabLabel = document.createElement("Label");
+      tabLabel.setAttribute("for", "name");
+      tabLabel.setAttribute("class", 'widgetTab');
+      tabLabel.innerHTML = this.label;
+      $( "#" + tableId ).append(tabLabel);
      
       var tbl = document.createElement("table");
       var tblBody = document.createElement("tbody");
@@ -88,12 +94,14 @@ class TimerTable {
 
       row = document.createElement("tr");
       cell = document.createElement("td");
-      var cellText = document.createTextNode("");
+      var cellText = document.createTextNode("");document.createElement("INPUT");
+      cell.setAttribute("class", 'cellText');
       cell.appendChild(cellText);
       row.appendChild(cell);
       for (var icol = 1; icol < 5; icol++) {
           cell = document.createElement("td");
           cellText = document.createTextNode(this.chTitle[icol - 1]);
+          cell.setAttribute("class", 'cellText');
           cell.style.textAlign = "center";
           cell.appendChild(cellText);
           row.appendChild(cell);
@@ -104,40 +112,57 @@ class TimerTable {
       row = document.createElement("tr");
       cell = document.createElement("td");
       cellText = document.createTextNode("Start (uS)");
+      cell.setAttribute("class", 'cellText');
       cell.style.textAlign = "center";
       cell.appendChild(cellText);
       row.appendChild(cell);
+      var startInput = [];
       for (var icol = 1; icol < 5; icol++) {
           cell = document.createElement("td");
-          var input = document.createElement("INPUT");
-          input.setAttribute("type", "number");
-          input.setAttribute("value", this.startTime[icol - 1]);
-          input.setAttribute("id",tableId + "-ch" + icol + "Start");
-          input.style.width = "5em";
+          var inputId = tableId + "-ch" + icol + "Start";
+          startInput[icol -1] = document.createElement("INPUT");
+          startInput[icol -1].setAttribute("type", "number");
+          startInput[icol -1].setAttribute("value", this.startTime[icol - 1]);
+          startInput[icol -1].setAttribute("id",inputId);
+          startInput[icol -1].style.width = "4em";
+
+          cell.setAttribute("class", 'cellText');
           cell.style.textAlign = "center";
-          cell.appendChild(input);
+          cell.appendChild(startInput[icol -1]);
           row.appendChild(cell);
       }
+      startInput[0].onchange = function(){_this.inputFieldChange(_this.tableId + "-ch" + 1 + "Start", _this.startTime[0]);};
+      startInput[1].onchange = function(){_this.inputFieldChange(_this.tableId + "-ch" + 2 + "Start", _this.startTime[1]);};
+      startInput[2].onchange = function(){_this.inputFieldChange(_this.tableId + "-ch" + 3 + "Start", _this.startTime[2]);};
+      startInput[3].onchange = function(){_this.inputFieldChange(_this.tableId + "-ch" + 4 + "Start", _this.startTime[3]);};
       
       tblBody.appendChild(row);
       
       row = document.createElement("tr");
       cell = document.createElement("td");
       cellText = document.createTextNode("Stop (uS)");
+      cell.setAttribute("class", 'cellText');
       cell.style.textAlign = "center";
       cell.appendChild(cellText);
       row.appendChild(cell);
+      var stopInput = [];
       for (var icol = 1; icol < 5; icol++) {
           cell = document.createElement("td");
-          input = document.createElement("INPUT");
-          input.setAttribute("type", "number");
-          input.setAttribute("value", this.stopTime[icol - 1]);
-          input.setAttribute("id",tableId + "-ch" + icol + "Stop");
-          input.style.width = "5em";
+          stopInput[icol -1] = document.createElement("INPUT");
+          stopInput[icol -1].setAttribute("type", "number");
+          stopInput[icol -1].setAttribute("value", this.stopTime[icol - 1]);
+          stopInput[icol -1].setAttribute("id",tableId + "-ch" + icol + "Stop");
+          stopInput[icol -1].style.width = "4em";
+
+          cell.setAttribute("class", 'cellText');
           cell.style.textAlign = "center";
-          cell.appendChild(input);
+          cell.appendChild(stopInput[icol -1]);
           row.appendChild(cell);
       }
+      stopInput[0].onchange = function(){_this.inputFieldChange(_this.tableId + "-ch" + 1 + "Stop", _this.stopTime[0]);};
+      stopInput[1].onchange = function(){_this.inputFieldChange(_this.tableId + "-ch" + 2 + "Stop", _this.stopTime[1]);};
+      stopInput[2].onchange = function(){_this.inputFieldChange(_this.tableId + "-ch" + 3 + "Stop", _this.stopTime[2]);};
+      stopInput[3].onchange = function(){_this.inputFieldChange(_this.tableId + "-ch" + 4 + "Stop", _this.stopTime[3]);};
       
       tblBody.appendChild(row);
       
@@ -145,14 +170,16 @@ class TimerTable {
           row = document.createElement("tr");
           cell = document.createElement("td");
           cellText = document.createTextNode("B" + irow);
+          cell.setAttribute("class", 'cellText');
           cell.style.textAlign = "center";
           cell.appendChild(cellText);
           row.appendChild(cell);
           for (var icol = 1; icol < 5; icol++) {
               cell = document.createElement("td");
-              input = document.createElement("INPUT");
+              var input = document.createElement("INPUT");
               input.setAttribute("type", "checkbox");
               input.setAttribute("id",tableId + "-ch" + icol + "-bit" + irow);
+              cell.setAttribute("class", 'cellText');
               cell.style.textAlign = "center";
               cell.appendChild(input);
               row.appendChild(cell);
@@ -161,12 +188,24 @@ class TimerTable {
       }
       tbl.appendChild(tblBody);
       divy.style.border = "thin solid #FFFFFF";
-      divy.style.width = "28em";
+//      divy.style.width = "28em";
       divy.appendChild(tbl);
       document.getElementById(tableId).appendChild(divy);
-      this.setDisabled(false);
 
   }
+  inputFieldChange(id, storedValue)
+  {
+    if (storedValue != $( "#" + id).val())
+    {
+      $( "#" + id).attr('class','inputFieldChange');
+    }
+    else
+    {
+      $( "#" + id).attr('class','inputFieldNormal');
+    }
+
+  }
+
   getBit(myByte, position)
 	{
 	   return (myByte >> position) & 1;
@@ -179,6 +218,9 @@ class TimerTable {
       this.startTime[ii - 1] = Number(chxdata[1]);
       this.stopTime[ii - 1]  = Number(chxdata[2]);
       this.event[ii - 1] = Number(chxdata[0]);
+      if (this.settingsEnabled) $( '#' + this.tableId + '-ch' + ii + 'Start').attr('class','inputFieldNormal');
+      if (this.settingsEnabled) $( '#' + this.tableId + '-ch' + ii + 'Stop').attr('class','inputFieldNormal');
+
 			for (var ij = 0; ij < 8; ++ij)
 			{
 				var bitOn = false;
