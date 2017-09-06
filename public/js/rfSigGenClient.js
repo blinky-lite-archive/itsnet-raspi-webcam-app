@@ -154,9 +154,9 @@ class RfSigGen
 
       tbl.appendChild(tblBody);
       guiDiv.style.border = "thin solid #FFFFFF";
-//      guiDiv.style.width = "28em";
       guiDiv.appendChild(tbl);
       $( "#" + parentId ).append(guiDiv);
+      document.getElementById(parentId).setAttribute("class", 'widgetDiv');
         
     }
     setSettings()
@@ -177,11 +177,16 @@ class RfSigGen
         if (rfOn == "ON")
         {
             $( "#" + this.parentId + "-onButton" ).html("OFF");
+            rfOn = 'OFF';
         }
         else
         {
             $( "#" + this.parentId + "-onButton" ).html("ON");
+            rfOn = 'ON';
         }
+        var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.powLvl.toString(), "rfPowOn":rfOn};
+        var data2 = {'topic':this.publishTopic, 'jsonData':data};
+        socket.emit('publishRFSigGenMqttTopic', data2);
         
     }
     inputFieldChange(id, storedValue)

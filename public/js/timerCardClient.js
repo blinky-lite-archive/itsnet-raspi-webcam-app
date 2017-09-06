@@ -27,8 +27,9 @@ class TimerCard {
         id = "#" + this.tableId +  "-ch" + icol + "Stop";
         $(id).prop("disabled", disabled);
     }
-    if ( disabled) document.getElementById(this.tableId + '-setButton').style.display = "none";
-    if (!disabled) document.getElementById(this.tableId + '-setButton').style.display = "block";
+    $("#" + this.tableId + '-setButton').attr("disabled", disabled);
+//    if ( disabled) document.getElementById(this.tableId + '-setButton').style.display = "none";
+//    if (!disabled) document.getElementById(this.tableId + '-setButton').style.display = "block";
     this.settingsEnabled = !disabled;
   }
   setSettings() 
@@ -78,12 +79,10 @@ class TimerCard {
       button.style.textAlign = "center";
       button.appendChild(buttonText);
       button.setAttribute("id", tableId + "-setButton");
-//      button.setAttribute("value", 'Submit');
       button.onclick = function() { _this.setSettings()}; 
       cell.style.textAlign = "center";
       cell.appendChild(button);
       row.appendChild(cell);
-      button.style.display = "none";
 
       cell = document.createElement("td");
       row.appendChild(cell);
@@ -188,8 +187,8 @@ class TimerCard {
       }
       tbl.appendChild(tblBody);
       divy.style.border = "thin solid #FFFFFF";
-//      divy.style.width = "28em";
       divy.appendChild(tbl);
+      document.getElementById(tableId).setAttribute("class", 'widgetDiv');
       document.getElementById(tableId).appendChild(divy);
 
   }

@@ -4,6 +4,8 @@ var socketio = require('socket.io');
 var mqtt = require('mqtt');
 var timerCard = require('./timerCardServer.js');
 var rfSigGen = require('./rfSigGenServer.js');
+var fastInterlock = require('./fastInterlockServer.js');
+var googleGauge = require('./googleGaugeServer.js');
 
 var app = express();
 var server = http.createServer(app);
@@ -78,6 +80,7 @@ io.on('connection', function(browserClient)
   browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
   timerCard.setupSocket(browserClient, io, mqttClient);
   rfSigGen.setupSocket(browserClient, io, mqttClient);
+  fastInterlock.setupSocket(browserClient, io, mqttClient);
 });
 
 
@@ -85,10 +88,14 @@ function handleMqttMessage(topic, message)
 {
   timerCard.handleMqtt(topic, message, io);
   rfSigGen.handleMqtt(topic, message, io);
+  fastInterlock.handleMqtt(topic, message, io);
+  googleGauge.handleMqtt(topic, message, io);
 }
 function connectToMqtt()
 {
   console.log('Connected to MQTT broker.');
   timerCard.subscribe(mqttClient);
   rfSigGen.subscribe(mqttClient);
+  fastInterlock.subscribe(mqttClient);
+  googleGauge.subscribe(mqttClient);
 }
