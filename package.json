@@ -1,7 +1,7 @@
 {
-  "name": "itsnet-test-app",
+  "name": "itsnet-bytegearbox-app",
   "version": "1.0.0",
-  "description": "A toy app to get started",
+  "description": "A app to display byte gear box",
   "main": "app.js",
   "dependencies": {
     "dygraphs": "^2.0.0",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/david-mcginnis/itsnet-test-app.git"
+    "url": "git+ssh://git@github.com/se-esss-litterbox/itsnet-llrf-app.git"
   },
   "keywords": [],
   "author": "",

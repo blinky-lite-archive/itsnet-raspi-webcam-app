@@ -27,27 +27,6 @@ body {
 .widgetDiv {
     padding: 2px;
 }
-.powOffButton {
-    background-color: #ffff00;
-    font-size: medium;
-    color: #000000;
-    height: 2em;
-    width: 7em;
-}
-.powOnButton {
-    background-color: #40ff00;
-    font-size: medium;
-    color: #000000;
-    height: 2em;
-    width: 7em;
-}
-.powIntButton {
-    background-color: #ffffff;
-    font-size: medium;
-    color: #000000;
-    height: 2em;
-    width: 7em;
-}
 .inputFieldChange{
     background-color: #ff99ff;
     color: #000000;
@@ -59,29 +38,4 @@ body {
 .inputFieldDisabled{
     background-color: #cccccc;
     color: #000000;
-}
-.resetFastInterlockButton {
-    background-color: #ff0000;
-    font-size: medium;
-    color: #000000;
-    height: 2em;
-    width: 7em;
-}
-.pinSwitchOffButton {
-    background-color: #ffbf00;
-    font-size: medium;
-    color: #000000;
-    height: 2em;
-    width: 7em;
-}
-.pinSwitchOnButton {
-    background-color: #40ff00;
-    font-size: medium;
-    color: #000000;
-    height: 2em;
-    width: 7em;
-}
-.fastInterlockTripLed {
-    height: 2em;
-    width: 2em;
 }

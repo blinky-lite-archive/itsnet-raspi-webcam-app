@@ -1,16 +1,12 @@
 <html>
 
 <head>
-    <title>ITS LLRF</title>
+    <title>ITS ByteGearBox</title>
     <link type="text/css" rel="stylesheet" href="css/its.css">
  	<link rel="shortcut icon" href="images/favicon.ico">
     <script src="/js/jquery.js"></script>
     <script src="/js/jquery-ui.min.js"></script>  
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="/js/timerCardClient.js"></script>  
-    <script src="/js/rfSigGenClient.js"></script>  
-    <script src="/js/fastInterlockClient.js"></script>  
-    <script src="/js/googleGaugeClient.js"></script>  
 </head>
 
 <body>
@@ -18,56 +14,27 @@
         <table>
             <tr>
                 <td><img src="images/itsLogo.jpg" height="30" width="55"></td>
-                <td class='pageTitle'>ITS LLRF</td>
+                <td class='pageTitle'>ITS ByteGearBox</td>
             </tr>
         </table>
         <div>
-            <div id='llrfTimerTable'      style="left:5px;   top:50px;  width:320px; position:absolute;"></div>
-            <div id='modulatorTimerTable' style="left:330px; top:50px;  width:320px; position:absolute;"></div>
-            <div id='googleGauge'         style="left:655px; top:50px;  width:230px; position:absolute;"></div>
         </div>
         <div>
-            <div id='rfSigGenGui'         style="left:5px;   top:400px; width:210px; position:absolute;"></div>
-            <div id='fastInterlockGui'    style="left:220px; top:400px; width:330px; position:absolute;"></div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script>
         var socket;
-        let llrfTimer = new TimerCard('Scp','RF','PM','Ch4', 'itsClkRecvr01/set/channel', 'LLRF Timer');
-        let modTimer  = new TimerCard('Mod','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer');
-        let rfSigGen  = new RfSigGen('itsRfSigGen01/set/rf', 'RF Generator');
-        let fastInterlock  = new FastInterlock('Fast Interlock');
         $( document ).ready(function() 
         {
             socket = io.connect(window.location.href);
             socket.on('enableSettings', function(data) 
             {
-                llrfTimer.setDisabled(!data);
-                modTimer.setDisabled(!data);
-                rfSigGen.setDisabled(!data);
-                fastInterlock.setDisabled(!data);
-                if (!data) alert("Looky but no touchy!");
+                 if (!data) alert("Looky but no touchy!");
             });
- 
-            llrfTimer.createTimer('llrfTimerTable');
-            modTimer.createTimer('modulatorTimerTable');
-            rfSigGen.createGui('rfSigGenGui');
-            fastInterlock.createGui('fastInterlockGui');
-            setupGaugePlots();
-
-            socket.emit('initTimerCard', 'itsClkRecvr01/set/channel');
-            socket.emit('initTimerCard', 'itsClkRecvr02/set/channel');
-            socket.emit('initRfSigGen' , 'itsRfSigGen01/set/rf');
-            socket.emit('initFastInterlock' , 'toshibaFastInterlock/get');
             socket.emit('ipStatus', 'get');
             socket.on('connect', function(data) {socket.emit('join', 'Connection from browser established.');});
-            socket.on('itsClkRecvr01/set/channel', function(data) {llrfTimer.readData(data); });
-            socket.on('itsClkRecvr02/set/channel', function(data) {modTimer.readData(data); });
-            socket.on('itsRfSigGen01/set/rf',      function(data) {rfSigGen.readData(data); });
-            socket.on('toshibaFastInterlock/get',  function(data) {fastInterlock.readData(data); });
-            socket.on('itsPowerMeter01/get',  function(data) {updateGaugePlots(data); });
-
+ 
 
         });
     </script>
