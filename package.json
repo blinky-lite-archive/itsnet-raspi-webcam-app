@@ -1,5 +1,5 @@
 {
-  "name": "itsnet-bytegearbox-app",
+  "name": "itsnet-basic-app",
   "version": "1.0.0",
   "description": "A app to display byte gear box",
   "main": "app.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/se-esss-litterbox/itsnet-llrf-app.git"
+    "url": "git+ssh://git@github.com/se-esss-litterbox/itsnet-basic-app.git"
   },
   "keywords": [],
   "author": "",
