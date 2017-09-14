@@ -6,7 +6,10 @@
  	<link rel="shortcut icon" href="images/favicon.ico">
     <script src="/js/jquery.js"></script>
     <script src="/js/jquery-ui.min.js"></script>  
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdn.auth0.com/js/lock/10.20.0/lock.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script src="/js/login.js"></script>  
+    <script src="/js/setupApp.js"></script>  
 </head>
 
 <body>
@@ -22,22 +25,17 @@
         <div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script>
         var socket;
         $( document ).ready(function() 
         {
             socket = io.connect(window.location.href);
-            socket.on('enableSettings', function(data) 
-            {
-                 if (!data) alert("Looky but no touchy!");
-            });
-            socket.emit('ipStatus', 'get');
             socket.on('connect', function(data) {socket.emit('join', 'Connection from browser established.');});
- 
-
+            var domain = 'itsnet.eu.auth0.com';
+            var clientID = 't9fbxGu1PlOZcgv9mvspN0GG6PwTBMRx';
+            logIn(clientID, domain, setupApp);
         });
-    </script>
+    </script> 
 </body>
 
 </html>

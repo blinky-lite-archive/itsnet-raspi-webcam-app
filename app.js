@@ -14,7 +14,7 @@ var ipAddress;
 
 var mqttClient = mqtt.connect('tcp://broker.shiftr.io', 
 {
-  clientId: 'itsnet-bytegearbox-app',
+  clientId: 'itsnet-basic-app',
   username: process.env.MQTTUSER,
   password: process.env.MQTTKEY,
   clean:false
@@ -23,9 +23,11 @@ var mqttClient = mqtt.connect('tcp://broker.shiftr.io',
 mqttClient.on('connect', function(){connectToMqtt();});
 mqttClient.on('message', function(topic, message) {handleMqttMessage(topic, message);});
 
+
 app.set('port', (process.env.PORT || 1337));
 
 app.use(express.static(__dirname + '/public'));
+
 
 app.get('/', function(req, res, next){
   res.sendFile(__dirname + '/index.html');
@@ -45,6 +47,7 @@ app.get('/', function(req, res, next){
   }
 
 });
+
 
 server.listen(app.get('port'), function() 
 {
