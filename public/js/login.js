@@ -1,8 +1,8 @@
-function logIn(auth0Client, auth0Domain, setupApp)
+function logIn(auth0Client, auth0Domain, setupApp, logoUrl)
 {
     var options = {
       theme: {
-        logo: 'https://itsnet-basic-app.herokuapp.com/images/itsLogo.jpg',
+        logo: logoUrl,
         primaryColor: '#31324F'
       },
       languageDictionary: {
@@ -13,9 +13,9 @@ function logIn(auth0Client, auth0Domain, setupApp)
     lock.show(
     {
         focusInput: true,
-        popup: true,
+        popup: false,
         closable: false,
-        allowSignUp: false,
+        allowSignUp: false
     });
     lock.on("authenticated", 
     function(authResult) 

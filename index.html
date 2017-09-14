@@ -33,7 +33,8 @@
             socket.on('connect', function(data) {socket.emit('join', 'Connection from browser established.');});
             var domain = 'itsnet.eu.auth0.com';
             var clientID = 't9fbxGu1PlOZcgv9mvspN0GG6PwTBMRx';
-            logIn(clientID, domain, setupApp);
+            var logoUrl = 'https://itsnet-basic-app-dmcginnis427.c9users.io/images/itsLogo.jpg';
+            logIn(clientID, domain, setupApp, logoUrl);
         });
     </script> 
 </body>
