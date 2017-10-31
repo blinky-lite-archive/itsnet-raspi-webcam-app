@@ -68,7 +68,7 @@ function handleMqttMessage(topic, message)
     imageData = JSON.parse(message);
     io.sockets.emit('newDate', imageData);
   }
-  if (topic == mqttMainTopic + '/image/jpgy')
+  if (topic == mqttMainTopic + '/image/jpg')
   {
     fs.writeFile('public/webCamImages/' + mqttMainTopic + '.jpg', message, function(err) 
     {
