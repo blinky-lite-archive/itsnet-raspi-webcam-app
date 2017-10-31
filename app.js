@@ -12,8 +12,8 @@ var mqttClientId = 'itsnet-raspi-webcam-07-app';
 var mqttMainTopic = 'itsIceCube07Cam';
 var cameraSettings = 
 {
-  width:'800',
-  height:'600',
+  width:'746',
+  height:'560',
   rot:'0',
   timeout:'3000'
 };
