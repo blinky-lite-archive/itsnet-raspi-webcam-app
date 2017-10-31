@@ -17,6 +17,7 @@ body {
     font-weight: bold;
     display: table-cell;
     vertical-align: middle;
+    text-align: left;
 }
 .widgetTab {
     background-color: #FFFFFF;

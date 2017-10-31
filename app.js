@@ -2,17 +2,29 @@ var express = require('express');
 var http = require('http');
 var socketio = require('socket.io');
 var mqtt = require('mqtt');
+var fs = require('fs');
 
 var app = express();
 var server = http.createServer(app);
 var io = socketio(server);
+
+var mqttClientId = 'itsnet-raspi-webcam-07-app';
+var mqttMainTopic = 'itsIceCube07Cam';
+var cameraSettings = 
+{
+  width:'800',
+  height:'600',
+  rot:'0',
+  timeout:'3000'
+};
+var imageData;
 
 var clientsConnected = 0;
 var ipAddress;
 
 var mqttClient = mqtt.connect('tcp://broker.shiftr.io', 
 {
-  clientId: 'itsnet-basic-app',
+  clientId: mqttClientId,
   username: process.env.MQTTUSER,
   password: process.env.MQTTKEY,
   clean:false
@@ -51,8 +63,32 @@ io.on('connection', function(browserClient)
 
 function handleMqttMessage(topic, message)
 {
+  if (topic == mqttMainTopic + '/image/date')
+  {
+    imageData = JSON.parse(message);
+    io.sockets.emit('newDate', imageData);
+  }
+  if (topic == mqttMainTopic + '/image/jpg')
+  {
+    fs.writeFile('public/webCamImages/' + mqttMainTopic + '.jpg', message, function(err) 
+    {
+      if(err) 
+      {
+        console.log(err); 
+      }
+      else
+      {
+            io.sockets.emit('newJpeg', imageData);
+      }
+    });  
+  }
+  
 }
 function connectToMqtt()
 {
   console.log('Connected to MQTT broker.');
+  mqttClient.subscribe(mqttMainTopic + '/image/date');
+  mqttClient.subscribe(mqttMainTopic + '/image/jpg');
+  mqttClient.publish(mqttMainTopic +'/set', JSON.stringify(cameraSettings), {qos:0, retain:true, dup:false}, function() {});
+  
 }

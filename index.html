@@ -1,14 +1,12 @@
 <html>
 
 <head>
-    <title>ITS Basic App</title>
+    <title>ITS Raspi Webcam</title>
     <link type="text/css" rel="stylesheet" href="css/its.css">
  	<link rel="shortcut icon" href="images/favicon.ico">
     <script src="/js/jquery.js"></script>
     <script src="/js/jquery-ui.min.js"></script>  
-    <script src="https://cdn.auth0.com/js/lock/10.20.0/lock.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
-    <script src="/js/login.js"></script>  
     <script src="/js/setupApp.js"></script>  
 </head>
 
@@ -16,25 +14,37 @@
     <div class="mainDiv">
         <table>
             <tr>
-                <td><img src="images/itsLogo.jpg" height="30" width="55"></td>
-                <td class='pageTitle'>ITS Basic App</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td><img src="images/itsLogo.jpg" height="30" width="55"></td>
+                            <td class='pageTitle' width='700'>ITS Brantevik Sea House Webcam</td>
+                            <td width='495'><span id='imageDate'></span></td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
+            <tr><td width='980' align='center'><img id='imageJpeg' height="560" width="746" src="/webCamImages/itsIceCube07Cam.jpg"></td></tr>
         </table>
-        <div>
-        </div>
-        <div>
-        </div>
     </div>
     <script>
         var socket;
         $( document ).ready(function() 
         {
+            var counter = 0;
             socket = io.connect(window.location.href);
             socket.on('connect', function(data) {socket.emit('join', 'Connection from browser established.');});
-            var domain = 'itsnet.eu.auth0.com';
-            var clientID = 't9fbxGu1PlOZcgv9mvspN0GG6PwTBMRx';
-            var logoUrl = 'https://itsnet-llrf-app.herokuapp.com/images/itsLogo.jpg';
-            logIn(clientID, domain, setupApp, logoUrl);
+            socket.on('newDate', function(data) 
+            {
+                $('#imageDate').html(data.date);
+                
+            });
+            socket.on('newJpeg', function(data) 
+            {
+                $('#imageJpeg').attr("src", "/webCamImages/itsIceCube07Cam.jpg?"+ data.counter);
+                
+            });
+            setupApp();
         });
     </script> 
 </body>
