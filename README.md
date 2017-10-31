@@ -1,1 +1,1 @@
-# itsnet-basic-app
+# itsnet-raspi-webcam-app
